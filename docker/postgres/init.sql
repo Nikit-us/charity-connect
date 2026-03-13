@@ -1,0 +1,5 @@
+CREATE DATABASE user_db;
+CREATE DATABASE keycloak_db;
+
+GRANT ALL PRIVILEGES ON DATABASE user_db TO postgres;
+GRANT ALL PRIVILEGES ON DATABASE keycloak_db TO postgres;
