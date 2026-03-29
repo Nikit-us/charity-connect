@@ -98,8 +98,9 @@ docker compose logs -f user-service
 ## Credentials (dev)
 
 - PostgreSQL:
-  - username: `postgres`
-  - password: `postgres`
+  - superuser: `postgres` / `postgres`
+  - user-service DB user: `charity_user` / `charity_pass`
+  - keycloak DB user: `keycloak_user` / `keycloak_pass`
 - Keycloak admin:
   - username: `admin`
   - password: `admin`
@@ -117,3 +118,8 @@ docker compose logs -f user-service
 - Используйте `./gradlew`, а не системный `gradle`.
 - Build logic подключен через `pluginManagement { includeBuild("build-logic") }`.
 - Compose ожидает локальный образ `charity-connect/user-service:latest`, который создаётся задачей Jib.
+- PostgreSQL данные хранятся в volume `pgdata`, поэтому база не пересоздаётся при обычных `docker compose down` / `up`.
+- `docker/postgres/init.sql` выполняется только при первом старте с пустым `pgdata`.
+- Полный reset БД (только когда это действительно нужно):
+  - `docker compose down -v`
+  - `docker compose up -d`

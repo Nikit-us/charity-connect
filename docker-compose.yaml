@@ -5,6 +5,9 @@ services:
       - "8081:8080"
     environment:
       APPLICATION_PORT: 8080
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/user_db
+      SPRING_DATASOURCE_USERNAME: charity_user
+      SPRING_DATASOURCE_PASSWORD: charity_pass
     depends_on:
       postgres:
         condition: service_healthy
@@ -21,7 +24,7 @@ services:
       - pgdata:/var/lib/postgresql/data
       - ./docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U charity_user" ]
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d postgres" ]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -45,8 +48,8 @@ services:
     environment:
       KC_DB: postgres
       KC_DB_URL: jdbc:postgresql://postgres:5432/keycloak_db
-      KC_DB_USERNAME: postgres
-      KC_DB_PASSWORD: postgres
+      KC_DB_USERNAME: keycloak_user
+      KC_DB_PASSWORD: keycloak_pass
       KC_BOOTSTRAP_ADMIN_USERNAME: admin
       KC_BOOTSTRAP_ADMIN_PASSWORD: admin
       KC_HOSTNAME_STRICT: "false"
@@ -61,6 +64,12 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - "1025:1025"
+      - "8025:8025"
 
 volumes:
   pgdata:
