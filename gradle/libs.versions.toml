@@ -3,20 +3,37 @@ java = "21"
 springBoot = "4.0.3"
 springDependencyManagement = "1.1.7"
 junit = "5.10.0"
+checkstyle = "13.3.0"
 jib = "3.5.3"
 lombok = "1.18.42"
+mapstruct = "1.6.3"
 
 [libraries]
+# Spring Boot starters
+spring-boot-starter = { group = "org.springframework.boot", name = "spring-boot-starter", version.ref = "springBoot" }
 spring-boot-starter-webmvc = { group = "org.springframework.boot", name = "spring-boot-starter-webmvc", version.ref = "springBoot" }
+spring-boot-starter-data-jpa = { group = "org.springframework.boot", name = "spring-boot-starter-data-jpa", version.ref = "springBoot" }
+spring-boot-starter-data-redis = { group = "org.springframework.boot", name = "spring-boot-starter-data-redis", version.ref = "springBoot" }
+spring-boot-starter-validation = { group = "org.springframework.boot", name = "spring-boot-starter-validation", version.ref = "springBoot" }
+spring-boot-starter-actuator = { group = "org.springframework.boot", name = "spring-boot-starter-actuator", version.ref = "springBoot" }
+spring-boot-starter-security-oauth2-resource-server = { group = "org.springframework.boot", name = "spring-boot-starter-security-oauth2-resource-server", version.ref = "springBoot" }
 spring-boot-devtools = { group = "org.springframework.boot", name = "spring-boot-devtools", version.ref = "springBoot" }
 spring-boot-starter-webmvc-test = { group = "org.springframework.boot", name = "spring-boot-starter-webmvc-test", version.ref = "springBoot" }
-spring-boot-starter-security-oauth2-resource-server  = { group = "org.springframework.boot", name = "spring-boot-starter-security-oauth2-resource-server", version.ref = "springBoot"}
 
+# Database
+postgresql = { group = "org.postgresql", name = "postgresql" }
+
+# Mapping
+mapstruct = { group = "org.mapstruct", name = "mapstruct", version.ref = "mapstruct" }
+mapstruct-processor = { group = "org.mapstruct", name = "mapstruct-processor", version.ref = "mapstruct" }
+
+# Testing
 junit-bom = { group = "org.junit", name = "junit-bom", version.ref = "junit" }
 junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter" }
 junit-platform-launcher = { group = "org.junit.platform", name = "junit-platform-launcher" }
 
-lombok = { group = "org.projectlombok", name = "lombok", version.ref = "lombok"}
+# Utils
+lombok = { group = "org.projectlombok", name = "lombok", version.ref = "lombok" }
 
 [plugins]
 spring-boot = { id = "org.springframework.boot", version.ref = "springBoot" }
