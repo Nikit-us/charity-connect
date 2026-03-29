@@ -1,7 +1,5 @@
 # Charity Connect
 
-Backend-платформа Charity Connect на Gradle Multi-Project Build с вынесенной build logic и сборкой Docker-образов через Jib.
-
 ## Стек
 
 - Java 21
@@ -93,6 +91,7 @@ docker compose logs -f user-service
 
 - `user-service`: http://localhost:8081
 - Keycloak: http://localhost:8080
+- Maihog: http://localhost:8025
 - PostgreSQL: `localhost:5432`
 - Redis: `localhost:6379`
 
