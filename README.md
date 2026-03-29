@@ -91,7 +91,7 @@ docker compose logs -f user-service
 
 - `user-service`: http://localhost:8081
 - Keycloak: http://localhost:8080
-- Maihog: http://localhost:8025
+- Mailhog: http://localhost:8025
 - PostgreSQL: `localhost:5432`
 - Redis: `localhost:6379`
 
