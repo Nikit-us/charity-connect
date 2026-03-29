@@ -1,121 +1,120 @@
-# Documentation
+# Charity Connect
 
-- [Introduction](#introduction)
-- [Project Structure](#project-structure)
-- [Charity-Connect System](#charity-connect-system)
-    - [Requirements](#requirements)
-        - [Java](#java)
-        - [Gradle](#gradle)
-        - [Docker](#docker)
-        - [Postman](#postman)
-    - [Core containers](#core-containers)
-    - [Swagger Endpoints](#swagger-endpoints)
-    - [Credentials](#credentials)
-      - [PostgreSQL](#postgreSQL)
-      - [Keycloak](#keycloak)
-- [Postman](#postman)
+Backend-платформа Charity Connect на Gradle Multi-Project Build с вынесенной build logic и сборкой Docker-образов через Jib.
 
-<a id="introduction"></a>
-# Introduction
+## Стек
 
+- Java 21
+- Gradle Wrapper (`./gradlew`)
+- Spring Boot
+- PostgreSQL
+- Redis
+- Keycloak
+- Docker / Docker Compose
 
+## Структура проекта
 
-<a id="project-structure"></a>
-# Project Structure
+```text
+.
+├── build-logic/                     # Included build с convention plugins
+│   └── conventions/
+├── common/
+│   ├── common-core/                 # Общая Java-логика
+│   └── common-spring/               # Общая Spring-логика
+├── services/
+│   └── user-service/                # REST сервис пользователей
+├── docker/
+│   ├── keycloak/realm.json
+│   └── postgres/init.sql
+├── docker-compose.yaml
+├── settings.gradle.kts
+└── build.gradle.kts
+```
 
-Project has the following structure:
-<pre><code>
-├── common                               # Set of common modules that can be used for other modules
-├── docker                               # Set of modules to start up docker containers
-├── services                             # Set of core modules
-|   └── user-service                     # User RESTfull web service
-├── tool                                 # Tools and utilities
-|   └── postman                          # Postman files
-└── README.md                            # Project readme file
-</code></pre>
+Gradle-проекты:
 
-<a id="charity-connect-system"></a>
-# Charity-Connect System
+- `:common:common-core`
+- `:common:common-spring`
+- `:services:user-service`
 
-<a id="icharity-connect-system"></a>
-## Requirements
+## Быстрый старт
 
-Install the following components to your local environment:
+1. Собрать артефакты:
 
-- **Java:** 21.0
-- **Gradle:** 9.0.0
-- **Docker:** 29.3.x or higher
-- **Postman** 11.x or higher
+```bash
+./gradlew clean build
+```
 
-<a id="java"></a>
-### Java
+2. Собрать Docker-образ(ы) сервисов через Jib:
 
-- Download Java JDK from https://jdk.java.net/java-se-ri/21
-- Setup JAVA_HOME
-- Setup PATH to Java
+```bash
+./gradlew jibDockerBuildAll
+```
 
-<a id="gradle"></a>
-### Gradle
+3. Поднять инфраструктуру и сервисы:
 
-- Install Gradle from https://gradle.org/releases/#9.0.0
-- Add the path to the Maven bin folder to the PATH environment variable
+```bash
+docker compose up -d
+```
 
-<a id="docker"></a>
-### Docker
+4. Проверить состояние:
 
-- Install Docker Desktop from https://docs.docker.com/desktop/windows/install/
+```bash
+docker compose ps
+```
 
-<a id="postman"></a>
-### Postman
+5. Логи сервиса:
 
-- Home site: https://www.postman.com/
-- Download and install.
+```bash
+docker compose logs -f user-service
+```
 
-<a id="core-containers"></a>
-## Core containers
+## Команды сборки образов (Jib)
 
-- Build the project
+- Для всех сервисов в локальный Docker daemon:
 
-      gradle clean build
+```bash
+./gradlew jibDockerBuildAll
+```
 
-- Build the docker images
+- Для всех сервисов с push в registry:
 
-      gradle jibDockerBuild
+```bash
+./gradlew jibAll
+```
 
-- Run the project
+- Для одного сервиса:
 
-      docker compose up -d --build
+```bash
+./gradlew :services:user-service:jibDockerBuild
+```
 
-- Check that all containers are started
+## Локальные URL
 
-      docker compose ps
+- `user-service`: http://localhost:8081
+- Keycloak: http://localhost:8080
+- PostgreSQL: `localhost:5432`
+- Redis: `localhost:6379`
 
-- View logs
+## Credentials (dev)
 
-      docker compose logs -f <service-name>  //e.g. docker-compose logs -f user-service"
+- PostgreSQL:
+  - username: `postgres`
+  - password: `postgres`
+- Keycloak admin:
+  - username: `admin`
+  - password: `admin`
 
-<a id="swagger-endpoints"></a>
-## Swagger Endpoints
+## Полезные команды Gradle
 
-API Documentation is generated automatically.
-Swagger UI is being generated in runtime and requires no extra configuration. It is available immediately after the
-application startup.
+```bash
+./gradlew projects
+./gradlew :services:user-service:tasks
+./gradlew test
+```
 
-### Local
+## Примечания
 
-
-
-<a id="credentials"></a>
-## Credentials
-
-<a id="postgresSQL"></a>
-### Postgresql
-
-    username: postgres
-    password: postgres
-
-<a id="keycloak-credentials"></a>
-### Keycloak
-
-    username: admin
-    password: admin
+- Используйте `./gradlew`, а не системный `gradle`.
+- Build logic подключен через `pluginManagement { includeBuild("build-logic") }`.
+- Compose ожидает локальный образ `charity-connect/user-service:latest`, который создаётся задачей Jib.

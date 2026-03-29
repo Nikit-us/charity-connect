@@ -38,3 +38,9 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+
+### Claude ###
+.claude
+CLAUDE.md
+mcp-config.json
+MCP_CONFIG.md

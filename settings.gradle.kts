@@ -1,3 +1,7 @@
+pluginManagement {
+    includeBuild("build-logic")
+}
+
 rootProject.name = "charity-connect"
 
 @Suppress("UnstableApiUsage")
@@ -8,8 +12,9 @@ dependencyResolutionManagement {
     }
 }
 
-include("common-lib")
-include("user-service")
+// common modules
+include("common:common-core")
+include("common:common-spring")
 
-project(":common-lib").projectDir = file("common/common-lib")
-project(":user-service").projectDir = file("services/user-service")
+// services
+include("services:user-service")
